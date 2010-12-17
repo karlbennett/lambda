@@ -6,9 +6,7 @@ import org.lambda.Lambda;
 import java.util.*;
 
 import static junit.framework.Assert.*;
-import static org.lambda.util.Collections.map;
-import static org.lambda.util.Collections.mapC;
-import static org.lambda.util.Collections.mapList;
+import static org.lambda.util.Collections.*;
 
 /**
  * @author Karl Bennett
@@ -19,7 +17,7 @@ public class CollectionsTest {
     public void testMap() throws Exception {
         Collection<Integer> collection = new Vector<Integer>(Arrays.asList(1, 2, 3, 4));
 
-        Collection mappedCollection = map(collection, new Lambda<Integer, Integer>(){
+        Collection mappedCollection = map(collection, new Lambda<Integer, Integer>() {
             @Override
             public Integer lambda(Integer integer) {
                 return integer + 1;
@@ -42,7 +40,7 @@ public class CollectionsTest {
         Collection<Integer> collection = new Vector<Integer>(Arrays.asList(1, 2, 3, 4));
         final Collection<Integer> collectionCopy = new Vector<Integer>();
 
-        mapC(collection, new Lambda<Integer, Integer>(){
+        mapC(collection, new Lambda<Integer, Integer>() {
             @Override
             public Integer lambda(Integer integer) {
                 collectionCopy.add(integer);
@@ -58,7 +56,7 @@ public class CollectionsTest {
     public void testMapList() throws Exception {
         List<Integer> list = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4));
 
-        List mappedList = mapList(list, new Lambda<Integer, List<Integer>>(){
+        List mappedList = mapList(list, new Lambda<Integer, List<Integer>>() {
             @Override
             public Integer lambda(List<Integer> tail) {
                 int sum = 0;
