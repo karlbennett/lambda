@@ -6,12 +6,12 @@ import org.lambda.Lambda;
 import java.util.*;
 
 import static junit.framework.Assert.*;
-import static org.lambda.util.Collections.*;
+import static org.lambda.util.LambdaCollections.*;
 
 /**
  * @author Karl Bennett
  */
-public class CollectionsTest {
+public class LambdaCollectionsTest {
 
     /**
      * Test map method with collection and lambda.
@@ -151,9 +151,9 @@ public class CollectionsTest {
         Collection<Integer> collection = new Vector<Integer>(Arrays.asList(1, 2, 3, 4));
         final Collection<Integer> collectionCopy = new Vector<Integer>();
 
-        mapC(collection, new Lambda<Integer, Integer>() {
+        mapC(collection, new Lambda<Object, Integer>() {
             @Override
-            public Integer lambda(Integer integer) {
+            public Object lambda(Integer integer) {
                 collectionCopy.add(integer);
                 return null;
             }
