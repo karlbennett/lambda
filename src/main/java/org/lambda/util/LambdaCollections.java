@@ -6,6 +6,7 @@ import java.beans.beancontext.BeanContext;
 import java.beans.beancontext.BeanContextServices;
 import java.beans.beancontext.BeanContextServicesSupport;
 import java.beans.beancontext.BeanContextSupport;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
@@ -22,185 +23,204 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the given collection that contains objects of type <E>.
-     * Then return a new collection containing the given return type <R>.
+     * Run the logic within the lambda method across the given collections that contains objects of type <E>.
+     * Then return a new collections containing the given return type <R>.
      *
-     * @param collection - the collection that will have the logic run across each element.
      * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param <R>        - the return type of the Lambda.lambda method and the type contained with the returned
-     *                   collection.
-     * @param <E>        - the argument type of the Lambda.lambda method and the type contained with the given
-     *                   collection.
-     * @param <RC>       - the type of the returned collection e.g. List, Set, Map... This does not have to be the same
-     *                   as the type of the given collection.
-     * @param <C>        - the type of the given collection e.g. List, Set, Map...
-     * @return - the new collection built from the given collection after the logic has been run over each element.
+     * @param collections - the collections that will have the logic run across each element.
+     * @return - the new collection built from the given collections after the logic has been run over each element.
      */
-    public static <R, E, RC extends Collection<R>, C extends Collection<E>> RC map(C collection, Lambda<R, E> lambda) {
+    public static <R, E, RC extends Collection<R>, C extends Collection<E>> RC map(Lambda<R, E> lambda,
+                                                                                   C... collections) {
         // TODO properly handle unwanted null arguments..
-        if (collection == null) throw new NullPointerException(
-                "org.lambda.util.LambdaCollections.map - collection cannot be null.");
+        if (collections == null) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.map - collections cannot be null.");
         if (lambda == null) throw new NullPointerException(
                 "org.lambda.util.LambdaCollections.map - lambda cannot be null.");
 
-        RC mappedCollection = instantiateCollection((Class<RC>) collection.getClass());
+        RC mappedCollection = collections.length == 0 ? null
+                : instantiateCollection((Class<RC>) collections[0].getClass());
 
         if (mappedCollection != null) {
-            runOverCollection(collection, lambda, mappedCollection);
+            runOverCollection(mappedCollection, lambda, collections);
         }
 
         return mappedCollection;
     }
 
     /**
-     * Run the logic within the lambda method across the given collection that contains objects of type <E>.
-     * Then return a new collection of the given type <RC> containing the given return type <R>.
+     * Run the logic within the lambda method across the given collections that contains objects of type <E>.
+     * Then return a new collections of the given type <RC> containing the given return type <R>.
      *
-     * @param returnType - the Class of the type of collection that should be returned e.g. List.class, Set.class,
+     * @param returnType - the Class of the type of collections that should be returned e.g. List.class, Set.class,
      *                   Map.class...
-     * @param collection - the collection that will have the logic run across each element.
      * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param <R>        - the return type of the Lambda.lambda method and the type contained with the returned
-     *                   collection.
-     * @param <E>        - the argument type of the Lambda.lambda method and the type contained with the given
-     *                   collection.
-     * @param <RC>       - the type of the returned collection e.g. List, Set, Map... This is set by the returnType
-     *                   argument.
-     * @param <C>        - the type of the given collection e.g. List, Set, Map...
-     * @return - the new collection built from the given collection after the logic has been run over each element.
+     * @param collections - the collections that will have the logic run across each element.
+     * @return - the new collection built from the given collections after the logic has been run over each element.
      */
-    public static <R, E, RC extends Collection<R>, C extends Collection<E>> RC map(Class<RC> returnType, C collection,
-                                                                                   Lambda<R, E> lambda) {
+    public static <R, E, RC extends Collection<R>, C extends Collection<E>> RC map(Class<RC> returnType,
+                                                                                   Lambda<R, E> lambda,
+                                                                                   C... collections) {
         // TODO properly handle unwanted null arguments..
-        if (collection == null) throw new NullPointerException(
-                "org.lambda.util.LambdaCollections.map - collection cannot be null.");
+        if (collections == null) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.map - collections cannot be null.");
         if (lambda == null) throw new NullPointerException(
                 "org.lambda.util.LambdaCollections.map - lambda cannot be null.");
 
-        RC mappedCollection = instantiateCollection(returnType);
+        RC mappedCollection = collections.length == 0 ? null
+                : instantiateCollection(returnType);
 
         if (mappedCollection != null) {
-            runOverCollection(collection, lambda, mappedCollection);
+            runOverCollection(mappedCollection, lambda, collections);
         }
 
         return mappedCollection;
     }
 
     /**
-     * Run the logic within the lambda method across the given collection that contains objects of type <E>.
-     * Then place each processed element into the given collection of type <RC>.
+     * Run the logic within the lambda method across the given collections that contains objects of type <E>.
+     * Then place each processed element into the given collections of type <RC>.
      *
-     * @param returnCollection - the collection that will have the processed elements added to it.
-     * @param collection       - the collection that will have the logic run across each element.
+     * @param returnCollection - the collections that will have the processed elements added to it.
      * @param lambda           - the Lambda object that contains the logic that will be run.
-     * @param <R>              - the return type of the Lambda.lambda method and the type contained with the returned
-     *                         collection.
-     * @param <E>              - the argument type of the Lambda.lambda method and the type contained with the given
-     *                         collection.
-     * @param <RC>             - the type of the returned collection e.g. List, Set, Map... This is set by the
-     *                         returnType argument.
-     * @param <C>              - the type of the given collection e.g. List, Set, Map...
+     * @param collections       - the collections that will have the logic run across each element.
      * @return - the collection that was passed in as the returnCollection.
      */
-    public static <R, E, RC extends Collection<R>, C extends Collection<E>> RC map(RC returnCollection, C collection,
-                                                                                   Lambda<R, E> lambda) {
+    public static <R, E, RC extends Collection<R>, C extends Collection<E>> RC map(RC returnCollection,
+                                                                                   Lambda<R, E> lambda,
+                                                                                   C... collections) {
         // TODO properly handle unwanted null arguments..
         if (returnCollection == null) throw new NullPointerException(
-                "org.lambda.util.LambdaCollections.map - return collection is null.");
-        if (collection == null) throw new NullPointerException(
-                "org.lambda.util.LambdaCollections.map - collection is null.");
+                "org.lambda.util.LambdaCollections.map - return collections is null.");
+        if (collections == null) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.map - collections is null.");
         if (lambda == null) throw new NullPointerException(
                 "org.lambda.util.LambdaCollections.map - lambda is null.");
 
-        runOverCollection(collection, lambda, returnCollection);
+        runOverCollection(returnCollection, lambda, collections);
 
         return returnCollection;
     }
 
     /**
-     * Run the logic within the lambda method across the given collection that contains objects of type <E>.
+     * Run the logic within the lambda method across the given collections that contains objects of type <E>.
      * <p/>
      * The return type for the Lambda class is set strictly to Object. This is because the return type in this method
      * is irrelevant.
      *
-     * @param collection - the collection that will have the logic run across each element.
      * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param <E>        - the argument type of the Lambda.lambda method and the type contained with the given
-     *                   collection.
-     * @param <C>        - the type of the given collection e.g. List, Set, Map...
+     * @param collections - the collections that will have the logic run across each element.
      */
-    public static <E, C extends Collection<E>> void mapC(C collection, Lambda<Object, E> lambda) {
-        if (collection == null)
-            throw new NullPointerException("org.lambda.util.LambdaCollections.map - collection is null.");
+    public static <E, C extends Collection<E>> void mapC(Lambda<Object, E> lambda, C collections) {
+        if (collections == null)
+            throw new NullPointerException("org.lambda.util.LambdaCollections.map - collections is null.");
         if (lambda == null) throw new NullPointerException("org.lambda.util.LambdaCollections.map - lambda is null.");
 
-        runOverCollection(collection, lambda);
+        runOverCollection(lambda, collections);
     }
 
     /**
-     * Run the logic within the lambda method across the given collection that contains collections with objects of
-     * type <E>. Then return a collapsed single dimension collection of all the processed elements.
+     * Run the logic within the lambda method across the given collections that contains collections with objects of
+     * type <E>. Then return a collapsed single dimension collections of all the processed elements.
      *
-     * @param returnType - the Class of the type of collection that should be returned e.g. List.class, Set.class,
+     * @param returnType - the Class of the type of collections that should be returned e.g. List.class, Set.class,
      *                   Map.class...
-     * @param collection - the 2 dimensional collection that will have the logic run across each element.
      * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param <R>        - the return type of the Lambda.lambda method and the type contained with the returned
-     *                   collection.
-     * @param <E>        - the argument type of the Lambda.lambda method and the type contained with the given
-     *                   collections contains within the given collection.
-     * @param <RC>       - the type of the returned collection e.g. List, Set, Map... This is set by the
-     *                   returnType argument.
-     * @param <C>        - the type of the given collection e.g. List<Set>, Set<Set>, Map<Collection>...
-     * @return - a single dimension collection contain the lambda results.
+     * @param collections - the 2 dimensional collections that will have the logic run across each element.
+     * @return - a single dimension collection containing the lambda results.
      */
     public static <R, E, RC extends Collection<R>, C extends Collection<Collection<E>>> RC mapCan(Class<RC> returnType,
-                                                                                                  C collection,
-                                                                                                  Lambda<R, E> lambda) {
+                                                                                                  Lambda<R, E> lambda,
+                                                                                                  C... collections) {
         // TODO properly handle unwanted null arguments..
         if (returnType == null) throw new NullPointerException(
                 "org.lambda.util.LambdaCollections.map - returnType cannot be null.");
-        if (collection == null) throw new NullPointerException(
-                "org.lambda.util.LambdaCollections.map - collection cannot be null.");
+        if (collections == null) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.map - collections cannot be null.");
         if (lambda == null) throw new NullPointerException(
                 "org.lambda.util.LambdaCollections.map - lambda cannot be null.");
 
-        RC mappedCollection = instantiateCollection(returnType);
+        RC mappedCollection = collections.length == 0 ? null
+                : instantiateCollection(returnType);
 
         if (mappedCollection != null) {
-            runOverDeepCollection(collection, lambda, mappedCollection);
+            runOverDeepCollection(mappedCollection, lambda, collections);
         }
 
         return mappedCollection;
     }
 
     /**
-     * Run the logic within the lambda method across the given list that contains objects of type <E>.
-     * The argument for the Lambda.lambda method when used with this method is a list containing the rest of the
+     * Run the logic within the lambda method across the given lists that contains objects of type <E>.
+     * The argument for the Lambda.lambda method when used with this method is a lists containing the rest of the
      * elements that are yet to be processed e,g. the current element that is to be process along with the remaining
-     * tail of the list. Then return a new list contain the result of the processed sub lists.
+     * tail of the lists. Then return a new lists contain the result of the processed sub lists.
      *
-     * @param list   - the list that will have the logic run across each element.
      * @param lambda - the Lambda object that contains the logic that will be run.
-     * @param <R>    - the return type of the Lambda.lambda method and the type contained with the returned list.
-     * @param <E>    - the argument type of the Lambda.lambda method and the type contained with the given list.
-     * @param <RL>   - the type of the returned list e.g. ArrayList, LinkedList, Vector...
-     * @param <L>    - The type of the list that will be passed into the lambda method as it's argument. This must be
-     *               the same as the list that was passed in to be processed.
+     * @param lists   - the lists that will have the logic run across each element.
      * @return - a list containing all the results on the processed sub lists. This list will be the same length as the
-     *         processed list.
+     *         sortest processed list.
      */
-    public static <R, E, RL extends List<R>, L extends List<E>> RL mapList(L list, Lambda<R, L> lambda) {
-        if (list == null) throw new NullPointerException("org.lambda.util.LambdaCollections.map - list is null.");
+    public static <R, E, RL extends List<R>, L extends List<E>> RL mapList(Lambda<R, L> lambda, L... lists) {
+        if (lists == null) throw new NullPointerException("org.lambda.util.LambdaCollections.map - lists is null.");
         if (lambda == null) throw new NullPointerException("org.lambda.util.LambdaCollections.map - lambda is null.");
 
-        RL mappedList = instantiateCollection((Class<RL>) list.getClass());
+        RL mappedList = lists.length == 0 ? null
+                : instantiateCollection((Class<RL>) lists[0].getClass());
 
         if (mappedList != null) {
-            runOverList(list, lambda, mappedList);
+            runOverList(mappedList, lambda, lists);
         }
 
         return mappedList;
+    }
+
+    public static <E, R, C extends Collection<E>> Boolean some(Lambda<R, E> lambda, C... collections) {
+        if (collections == null || collections.length == 0) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.map - collections cannot be null or empty.");
+        if (lambda == null) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.map - lambda cannot be null.");
+
+        Boolean some = false;
+        Iterator<E>[] iterators = getIterators(collections);
+        E[] arguments = null;
+        R result = null;
+        while (haveNext(iterators)) {
+
+            arguments = assignValues(iterators);
+
+            result = lambda.lambda(arguments);
+            if (null != result && !Boolean.FALSE.equals(result)) {
+                some = true;
+                break;
+            }
+        }
+
+        return some;
+    }
+
+    public static <E, R, C extends Collection<E>> Boolean every(Lambda<R, E> lambda, C... collections) {
+        if (collections == null || collections.length == 0) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.map - collections cannot be null or empty.");
+        if (lambda == null) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.map - lambda cannot be null.");
+
+        Boolean some = true;
+        Iterator<E>[] iterators = getIterators(collections);
+        E[] arguments = null;
+        R result = null;
+        while (haveNext(iterators)) {
+
+            arguments = assignValues(iterators);
+
+            result = lambda.lambda(arguments);
+            if (null == result || Boolean.FALSE.equals(result)) {
+                some = false;
+                break;
+            }
+        }
+
+        return some;
     }
 
     /**
@@ -269,78 +289,136 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the given logic in the Lambda class over the given collection.
+     * Run the given logic in the Lambda class over the given collections.
      * <p/>
      * The return type for the Lambda class is set strictly to Object. This is because the return type in this method
      * is irrelevant.
      *
-     * @param collection - the collection that will have the logic run across each element.
      * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param <E>        - the argument type of the Lambda.lambda method and the type contained with the given
-     *                   collection.
+     * @param collections - the collections that will have the logic run across each element.
      */
-    private static <E> void runOverCollection(Collection<E> collection, Lambda<Object, E> lambda) {
-        for (E element : collection) {
-            lambda.lambda(element);
+    private static <E> void runOverCollection(Lambda<Object, E> lambda, Collection<E>... collections) {
+        E[] arguments = null;
+        Iterator<E>[] iterators = getIterators(collections);
+        while (haveNext(iterators)) {
+            arguments = assignValues(iterators);
+
+            lambda.lambda(arguments);
         }
     }
 
     /**
-     * Run the given logic in the Lambda class over the given collection and place the processed elements into the
-     * second collection.
+     * Run the given logic in the Lambda class over the given collections and place the processed elements into the
+     * second collections.
      *
-     * @param collection       - the collection that will have the logic run across each element.
-     * @param lambda           - the Lambda object that contains the logic that will be run.
      * @param mappedCollection - the collection that will have the processed added to it.
-     * @param <R>              - the return type of the Lambda.lambda method and the type contained with the returned
-     *                         collection.
-     * @param <E>              - the argument type of the Lambda.lambda method and the type contained with the given
-     *                         collection.
-     */
-    private static <R, E> void runOverCollection(Collection<E> collection, Lambda<R, E> lambda,
-                                                 Collection<R> mappedCollection) {
-        for (E element : collection) {
-            mappedCollection.add(lambda.lambda(element));
-        }
-    }
-
-    /**
-     * Run the logic within the lambda method across the given collection that contains collections with objects of
-     * type <E> and collapse the processed elements into a single dimension collection.
-     *
-     * @param collection       - the 2 dimensional collection that will have the logic run across each element.
      * @param lambda           - the Lambda object that contains the logic that will be run.
-     * @param mappedCollection - the single dimension collection that will have the processed elements added to it.
-     * @param <R>              - the return type of the Lambda.lambda method and the type contained with the second
-     *                         single dimension collection.
-     * @param <E>              - the argument type of the Lambda.lambda method and the type of the collections contained
-     *                         within the given collection.
+     * @param collections       - the collections that will have the logic run across each element.
      */
-    private static <R, E> void runOverDeepCollection(Collection<Collection<E>> collection, Lambda<R, E> lambda,
-                                                     Collection<R> mappedCollection) {
-        for (Collection<E> element : collection) {
-            runOverCollection(element, lambda, mappedCollection);
+    private static <R, E> void runOverCollection(Collection<R> mappedCollection, Lambda<R, E> lambda,
+                                                 Collection<E>... collections) {
+        E[] arguments = null;
+        Iterator<E>[] iterators = getIterators(collections);
+        while (haveNext(iterators)) {
+            arguments = assignValues(iterators);
+
+            mappedCollection.add(lambda.lambda(arguments));
         }
     }
 
     /**
-     * Run the logic within the lambda method across the given list that contains objects of type <E>.
-     * The argument for the Lambda.lambda method when used with this method is a list containing the rest of the
-     * elements that are yet to be processed e,g. the current element that is to be process along with the remaining
-     * tail of the list. While processing the list add the processed element to the second list.
+     * Run the logic within the lambda method across the given collections that contains collections with objects of
+     * type <E> and collapse the processed elements into a single dimension collections.
      *
-     * @param list       - the list that will have the logic run across each element.
-     * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param mappedList - the list that will have the result of the processed sub lists added to it.
-     * @param <R>        - the return type of the Lambda.lambda method and the type contained with the second list.
-     * @param <E>        - the argument type of the Lambda.lambda method and the type contained with the given list.
-     * @param <L>        - The type of the list that will be passed into the lambda method as it's argument. This must be
-     *                   the same as the list that was passed in to be processed.
+     * @param mappedCollection - the single dimension collections that will have the processed elements added to it.
+     * @param lambda           - the Lambda object that contains the logic that will be run.
+     * @param collections       - the 2 dimensional collections that will have the logic run across each element.
      */
-    private static <R, E, L extends List<E>> void runOverList(List<E> list, Lambda<R, L> lambda,
-                                                              List<R> mappedList) {
-        for (int i = 0; i < list.size(); i++) {
-            mappedList.add(lambda.lambda((L) list.subList(i, list.size())));
+    private static <R, E> void runOverDeepCollection(Collection<R> mappedCollection, Lambda<R, E> lambda,
+                                                     Collection<Collection<E>>... collections) {
+        Collection<E>[] arguments = null;
+        Iterator<Collection<E>>[] iterators = getIterators(collections);
+        while (haveNext(iterators)) {
+            arguments = assignValues(iterators);
+
+            runOverCollection(mappedCollection, lambda, arguments);
         }
+    }
+
+    /**
+     * Run the logic within the lambda method across the given lists that contains objects of type <E>.
+     * The argument for the Lambda.lambda method when used with this method is a lists containing the rest of the
+     * elements that are yet to be processed e,g. the current element that is to be process along with the remaining
+     * tail of the lists. While processing the lists add the processed element to the second lists.
+     *
+     * @param mappedList - the lists that will have the result of the processed sub lists added to it.
+     * @param lambda     - the Lambda object that contains the logic that will be run.
+     * @param lists       - the lists that will have the logic run across each element.
+     */
+    private static <R, E, L extends List<E>> void runOverList(List<R> mappedList, Lambda<R, L> lambda,
+                                                              L... lists) {
+        L[] tails = null;
+        for (int i = 0; i < lists[0].size(); i++) {
+            tails = getTails(i, lists);
+
+            if (null == tails) break;
+            else mappedList.add(lambda.lambda(tails));
+        }
+    }
+
+    private static <E, L extends List<E>> L[] getTails(int nth, L... lists) {
+        if (lists == null) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.getTails - lists must not be null.");
+
+        L tail = null;
+        L[] tails = null;
+        for (int i = 0; i < lists.length; i++) {
+            tail = (L) lists[i].subList(nth, lists[i].size());
+
+            if (tails == null) {
+                tails = (L[]) Array.newInstance(tail.getClass(), lists.length);
+            }
+
+            tails[i] = tail;
+        }
+
+        return tails;
+    }
+
+    private static <E> Iterator<E>[] getIterators(Collection<E>... collections) {
+        Iterator<E>[] iterators = (Iterator<E>[]) new Iterator[collections.length];
+
+        for (int i = 0; i < iterators.length; i++) {
+            iterators[i] = collections[i].iterator();
+        }
+
+        return iterators;
+    }
+
+    private static Boolean haveNext(Iterator... iterators) {
+        for (Iterator itr : iterators) {
+            if (!itr.hasNext()) return false;
+        }
+
+        return true;
+    }
+
+    private static <E> E[] assignValues(Iterator<E>[] iterators) {
+        if (iterators == null) throw new NullPointerException(
+                "org.lambda.util.LambdaCollections.assignValues - iterators must not be null.");
+
+        E value = null;
+        E[] values = null;
+        for (int i = 0; i < iterators.length; i++) {
+            value = iterators[i].next();
+
+            if (values == null) {
+                values = (E[]) Array.newInstance(value.getClass(), iterators.length);
+            }
+
+            values[i] = value;
+        }
+
+        return values;
     }
 }

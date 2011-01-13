@@ -11,8 +11,8 @@ public interface Lambda<R, A> {
     /**
      * Is run from within any method that contains the Lambda class as an argument. Override and place custom logic
      * within.
-     * @param l the argument that will be passed from within the outer method.
+     * @param l the argument/s that will be passed from within the outer method.
      * @return the result of your logic back to outer method.
      */
-    public R lambda(A l);
+    public R lambda(A... l);
 }
