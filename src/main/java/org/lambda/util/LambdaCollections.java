@@ -23,12 +23,19 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the given collections that contains objects of type <E>.
-     * Then return a new collections containing the given return type <R>.
+     * Run the logic within the lambda method across the provided collection/s that contain objects of type <E>.
+     * Then return a new collection containing the given return type <R>.
      *
-     * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param collections - the collections that will have the logic run across each element.
-     * @return - the new collection built from the given collections after the logic has been run over each element.
+     * @param lambda      - the Lambda object that contains the logic that will be run.
+     * @param collections - the collection/s that will have the logic run across each element.
+     * @param <R>         - the return type of the Lambda.lambda method and the type contained with the returned
+     *                    collection.
+     * @param <E>         - the argument type of the Lambda.lambda method and the type contained with the given
+     *                    collection/s.
+     * @param <RC>        - the type of the returned collection e.g. List, Set, Map... This does not have to be the same
+     *                    as the type of the given collection.
+     * @param <C>         - the type of the given collection e.g. List, Set, Map...
+     * @return - a new collection containing the results of the lambda method.
      */
     public static <R, E, RC extends Collection<R>, C extends Collection<E>> RC map(Lambda<R, E> lambda,
                                                                                    C... collections) {
@@ -49,13 +56,20 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the given collections that contains objects of type <E>.
-     * Then return a new collections of the given type <RC> containing the given return type <R>.
+     * Run the logic within the lambda method across the provided collection/s that contain objects of type <E>.
+     * Then return a new collection of the given type <RC> containing the given return type <R>.
      *
-     * @param returnType - the Class of the type of collections that should be returned e.g. List.class, Set.class,
-     *                   Map.class...
-     * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param collections - the collections that will have the logic run across each element.
+     * @param returnType  - the Class of the type of collections that should be returned e.g. List.class, Set.class,
+     *                    Map.class, ArrayList.class...
+     * @param lambda      - the Lambda object that contains the logic that will be run.
+     * @param collections - the collection/s that will have the logic run across each element.
+     * @param <R>         - the return type of the Lambda.lambda method and the type contained with the returned
+     *                    collection.
+     * @param <E>         - the argument type of the Lambda.lambda method and the type contained with the given
+     *                    collection/s.
+     * @param <RC>        - the type of the returned collection e.g. List, Set, Map... This is set by the returnType
+     *                    argument.
+     * @param <C>         - the type of the given collection e.g. List, Set, Map...
      * @return - the new collection built from the given collections after the logic has been run over each element.
      */
     public static <R, E, RC extends Collection<R>, C extends Collection<E>> RC map(Class<RC> returnType,
@@ -78,12 +92,19 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the given collections that contains objects of type <E>.
-     * Then place each processed element into the given collections of type <RC>.
+     * Run the logic within the lambda method across the provided collection/s that contain objects of type <E>.
+     * Then place each processed element into the provided return collection of type <RC>.
      *
-     * @param returnCollection - the collections that will have the processed elements added to it.
+     * @param returnCollection - the collection that will have the processed elements added to it.
      * @param lambda           - the Lambda object that contains the logic that will be run.
-     * @param collections       - the collections that will have the logic run across each element.
+     * @param collections      - the collection/s that will have the logic run across each element.
+     * @param <R>              - the return type of the Lambda.lambda method and the type contained with the returned
+     *                         collection.
+     * @param <E>              - the argument type of the Lambda.lambda method and the type contained with the given
+     *                         collection/s.
+     * @param <RC>             - the type of the returned collection e.g. List, Set, Map... This is set by the
+     *                         returnType argument.
+     * @param <C>              - the type of the given collection e.g. List, Set, Map...
      * @return - the collection that was passed in as the returnCollection.
      */
     public static <R, E, RC extends Collection<R>, C extends Collection<E>> RC map(RC returnCollection,
@@ -103,13 +124,16 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the given collections that contains objects of type <E>.
+     * Run the logic within the lambda method across the provided collection/s that contain objects of type <E>.
      * <p/>
      * The return type for the Lambda class is set strictly to Object. This is because the return type in this method
      * is irrelevant.
      *
-     * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param collections - the collections that will have the logic run across each element.
+     * @param lambda      - the Lambda object that contains the logic that will be run.
+     * @param collections - the collection/s that will have the logic run across each element.
+     * @param <E>         - the argument type of the Lambda.lambda method and the type contained with the given
+     *                    collection/s.
+     * @param <C>         - the type of the given collection e.g. List, Set, Map...
      */
     public static <E, C extends Collection<E>> void mapC(Lambda<Object, E> lambda, C collections) {
         if (collections == null)
@@ -120,13 +144,21 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the given collections that contains collections with objects of
-     * type <E>. Then return a collapsed single dimension collections of all the processed elements.
+     * Run the logic within the lambda method across the provided collection/s that contain collections with objects of
+     * type <E>. Then return a collapsed single dimension collection of all the processed elements.
      *
-     * @param returnType - the Class of the type of collections that should be returned e.g. List.class, Set.class,
-     *                   Map.class...
-     * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param collections - the 2 dimensional collections that will have the logic run across each element.
+     * @param returnType  - the Class of the type of collection that should be returned e.g. List.class, Set.class,
+     *                    Map.class...
+     * @param lambda      - the Lambda object that contains the logic that will be run.
+     * @param collections - the 2 dimensional collection/s that will have the logic run across each element.
+     * @param <R>         - the return type of the Lambda.lambda method and the type contained with the returned
+     *                    collection.
+     * @param <E>         - the argument type of the Lambda.lambda method and the type contained with the given
+     *                    collections contains within the given collection/s.
+     * @param <RC>        - the type of the returned collection e.g. List, Set, Map... This is set by the
+     *                    returnType argument.
+     * @param <C>         - the type of the given collection e.g. List<Set>, Set<Set>, Map<Collection>...
+     *                    lambda method.
      * @return - a single dimension collection containing the lambda results.
      */
     public static <R, E, RC extends Collection<R>, C extends Collection<Collection<E>>> RC mapCan(Class<RC> returnType,
@@ -151,15 +183,20 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the given lists that contains objects of type <E>.
-     * The argument for the Lambda.lambda method when used with this method is a lists containing the rest of the
-     * elements that are yet to be processed e,g. the current element that is to be process along with the remaining
-     * tail of the lists. Then return a new lists contain the result of the processed sub lists.
+     * Run the logic within the lambda method across the provided list/s that contain objects of type <E>.
+     * The argument for the Lambda.lambda method when used with this method is a list containing the rest of the
+     * elements that are yet to be processed e,g. the current element/s that are yet to be process along with the
+     * remaining tail of the list/s. Then return a new list contain the result of the processed sub lists.
      *
      * @param lambda - the Lambda object that contains the logic that will be run.
-     * @param lists   - the lists that will have the logic run across each element.
-     * @return - a list containing all the results on the processed sub lists. This list will be the same length as the
-     *         sortest processed list.
+     * @param lists  - the list/s that will have the logic run across each element.
+     * @param <R>    - the return type of the Lambda.lambda method and the type contained with the returned list.
+     * @param <E>    - the argument type of the Lambda.lambda method and the type contained with the given list/s.
+     * @param <RL>   - the type of the returned list e.g. ArrayList, LinkedList, Vector...
+     * @param <L>    - The type of the list that will be passed into the lambda method as it's argument. This must be
+     *               the same as the list that was passed in to be processed.
+     * @return - a list containing all the results of the processed sub lists. This list will be the same length as the
+     *         shortest processed list.
      */
     public static <R, E, RL extends List<R>, L extends List<E>> RL mapList(Lambda<R, L> lambda, L... lists) {
         if (lists == null) throw new NullPointerException("org.lambda.util.LambdaCollections.map - lists is null.");
@@ -175,7 +212,22 @@ public class LambdaCollections {
         return mappedList;
     }
 
-    public static <E, R, C extends Collection<E>> Boolean some(Lambda<R, E> lambda, C... collections) {
+    /**
+     * Return true if any evaluation of lambda returns true or not null when run across the elements within the provided
+     * collection/s.
+     * <p/>
+     * The lambda method will be iteratively evaluated until it returns a not null or true value where all evaluations
+     * will stop.
+     *
+     * @param lambda      - the Lambda object that contains the logic that will be run.
+     * @param collections - the collection/s that will have the logic run across each element.
+     * @param <R>         - the return type of the Lambda.lambda method.
+     * @param <E>         - the argument type of the Lambda.lambda method and the type contained with the given
+     *                    collection/s.
+     * @param <C>         - the type of the given collection e.g. List, Set, Map...
+     * @return - true if a non null or true value is returned from an evaluation of the lambda method otherwise false.
+     */
+    public static <R, E, C extends Collection<E>> Boolean some(Lambda<R, E> lambda, C... collections) {
         if (collections == null || collections.length == 0) throw new NullPointerException(
                 "org.lambda.util.LambdaCollections.map - collections cannot be null or empty.");
         if (lambda == null) throw new NullPointerException(
@@ -199,7 +251,22 @@ public class LambdaCollections {
         return some;
     }
 
-    public static <E, R, C extends Collection<E>> Boolean every(Lambda<R, E> lambda, C... collections) {
+    /**
+     * Return true if all evaluations of lambda return true or not null when run across the elements within the provided
+     * collection/s
+     * <p/>
+     * The lambda method will be iteratively evaluated until it returns a null or false value where all evaluations will
+     * stop.
+     *
+     * @param lambda      - the Lambda object that contains the logic that will be run.
+     * @param collections - the collection/s that will have the logic run across each element.
+     * @param <R>         - the return type of the Lambda.lambda method.
+     * @param <E>         - the argument type of the Lambda.lambda method and the type contained with the given
+     *                    collection/s.
+     * @param <C>         - the type of the given collection e.g. List, Set, Map...
+     * @return - true if a non null or true value is returned from all evaluations of the lambda method otherwise false.
+     */
+    public static <R, E, C extends Collection<E>> Boolean every(Lambda<R, E> lambda, C... collections) {
         if (collections == null || collections.length == 0) throw new NullPointerException(
                 "org.lambda.util.LambdaCollections.map - collections cannot be null or empty.");
         if (lambda == null) throw new NullPointerException(
@@ -289,13 +356,15 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the given logic in the Lambda class over the given collections.
+     * Run the given logic in the Lambda class over the provided collection/s.
      * <p/>
      * The return type for the Lambda class is set strictly to Object. This is because the return type in this method
      * is irrelevant.
      *
-     * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param collections - the collections that will have the logic run across each element.
+     * @param lambda      - the Lambda object that contains the logic that will be run.
+     * @param collections - the collection/s that will have the logic run across each element.
+     * @param <E>         - the argument type of the Lambda.lambda method and the type contained with the provided
+     *                    collection/s.
      */
     private static <E> void runOverCollection(Lambda<Object, E> lambda, Collection<E>... collections) {
         E[] arguments = null;
@@ -308,12 +377,16 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the given logic in the Lambda class over the given collections and place the processed elements into the
-     * second collections.
+     * Run the given logic in the Lambda class over the provided collection/s and place the processed elements into the
+     * provided return collection.
      *
-     * @param mappedCollection - the collection that will have the processed added to it.
+     * @param mappedCollection - the collection that will have the lambda results added to it.
      * @param lambda           - the Lambda object that contains the logic that will be run.
-     * @param collections       - the collections that will have the logic run across each element.
+     * @param collections      - the collection/s that will have the logic run across each element.
+     * @param <R>              - the return type of the Lambda.lambda method and the type contained with the returned
+     *                         collection.
+     * @param <E>              - the argument type of the Lambda.lambda method and the type contained with the provided
+     *                         collection/s.
      */
     private static <R, E> void runOverCollection(Collection<R> mappedCollection, Lambda<R, E> lambda,
                                                  Collection<E>... collections) {
@@ -327,12 +400,16 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the given collections that contains collections with objects of
-     * type <E> and collapse the processed elements into a single dimension collections.
+     * Run the logic within the lambda method across the provided collection/s that contain collections with objects of
+     * type <E> and collapse the processed elements into a single dimension collection.
      *
-     * @param mappedCollection - the single dimension collections that will have the processed elements added to it.
+     * @param mappedCollection - the single dimension collection that will have the lambda results added to it.
      * @param lambda           - the Lambda object that contains the logic that will be run.
-     * @param collections       - the 2 dimensional collections that will have the logic run across each element.
+     * @param collections      - the 2 dimensional collection/s that will have the logic run across each element.
+     * @param <R>              - the return type of the Lambda.lambda method and the type contained with the provided
+     *                         single dimension collection.
+     * @param <E>              - the argument type of the Lambda.lambda method and the type of the collection/s
+     *                         contained within the given collection.
      */
     private static <R, E> void runOverDeepCollection(Collection<R> mappedCollection, Lambda<R, E> lambda,
                                                      Collection<Collection<E>>... collections) {
@@ -346,14 +423,18 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the given lists that contains objects of type <E>.
-     * The argument for the Lambda.lambda method when used with this method is a lists containing the rest of the
+     * Run the logic within the lambda method across the provided list/s that contain objects of type <E>.
+     * The argument for the Lambda.lambda method when used with this method is a list/s containing the rest of the
      * elements that are yet to be processed e,g. the current element that is to be process along with the remaining
-     * tail of the lists. While processing the lists add the processed element to the second lists.
+     * tail of the list/s. The results of the lambda method will be added to the provided mapped list.
      *
-     * @param mappedList - the lists that will have the result of the processed sub lists added to it.
+     * @param mappedList - the lists that will have the the lambda results added to it.
      * @param lambda     - the Lambda object that contains the logic that will be run.
-     * @param lists       - the lists that will have the logic run across each element.
+     * @param lists      - the list/s that will have the logic run across each element.
+     * @param <R>        - the return type of the Lambda.lambda method and the type contained with the mapped list.
+     * @param <E>        - the argument type of the Lambda.lambda method and the type contained with the provided list/s.
+     * @param <L>        - The type of the list that will be passed into the lambda method as it's argument. This must be
+     *                   the same as the list/s that was passed in to be processed.
      */
     private static <R, E, L extends List<E>> void runOverList(List<R> mappedList, Lambda<R, L> lambda,
                                                               L... lists) {
