@@ -447,6 +447,16 @@ public class LambdaCollections {
         }
     }
 
+    /**
+     * Return an array of substrings made from the provided list/s. The substring is selected by taking the all the
+     * elements in the given list that are after the provided index.
+     *
+     * @param nth   - the index that will be used to build the tail.
+     * @param lists - the list/s that will have it's tail extracted.
+     * @param <E>   - the type of the elements contain within the list/s.
+     * @param <L>   - the type of the list/s provided to this method.
+     * @return - an array containing the tails of the provided list/s.
+     */
     private static <E, L extends List<E>> L[] getTails(int nth, L... lists) {
         if (lists == null) throw new NullPointerException(
                 "org.lambda.util.LambdaCollections.getTails - lists must not be null.");
@@ -466,6 +476,13 @@ public class LambdaCollections {
         return tails;
     }
 
+    /**
+     * Return an array containing the iterator/s of the provided collection/s.
+     *
+     * @param collections - the collection/s that will have it's iterator extracted.
+     * @param <E>         - the type of the elements within the collection and iterator.
+     * @return - an array of iterators.
+     */
     private static <E> Iterator<E>[] getIterators(Collection<E>... collections) {
         Iterator<E>[] iterators = (Iterator<E>[]) new Iterator[collections.length];
 
@@ -476,6 +493,12 @@ public class LambdaCollections {
         return iterators;
     }
 
+    /**
+     * Check to see if the given iterator/s have a next element.
+     *
+     * @param iterators - the iterator/s to check.
+     * @return - true if the given iterator/s has a next element otherwise false.
+     */
     private static Boolean haveNext(Iterator... iterators) {
         for (Iterator itr : iterators) {
             if (!itr.hasNext()) return false;
@@ -484,6 +507,13 @@ public class LambdaCollections {
         return true;
     }
 
+    /**
+     * Return an array of the next element/s for the provided iterator/s.
+     *
+     * @param iterators - the iterator/s to have it's next element extracted.
+     * @param <E>       - the type of the elements contained with the iterator/s and returned array.
+     * @return - an array of the element/s taken from the provided iterator/s.
+     */
     private static <E> E[] assignValues(Iterator<E>[] iterators) {
         if (iterators == null) throw new NullPointerException(
                 "org.lambda.util.LambdaCollections.assignValues - iterators must not be null.");
