@@ -23,8 +23,8 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the provided collection/s that contain objects of type <E>.
-     * Then return a new collection containing the given return type <R>.
+     * Run the logic within the lambda method across the provided collection/s that contain objects of type &lt;E&gt;.
+     * Then return a new collection containing the given return type &lt;R&gt;.
      *
      * @param lambda      - the Lambda object that contains the logic that will be run.
      * @param collections - the collection/s that will have the logic run across each element.
@@ -56,8 +56,8 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the provided collection/s that contain objects of type <E>.
-     * Then return a new collection of the given type <RC> containing the given return type <R>.
+     * Run the logic within the lambda method across the provided collection/s that contain objects of type &lt;E&gt;.
+     * Then return a new collection of the given type <RC> containing the given return type &lt;R&gt;.
      *
      * @param returnType  - the Class of the type of collections that should be returned e.g. List.class, Set.class,
      *                    Map.class, ArrayList.class...
@@ -92,7 +92,7 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the provided collection/s that contain objects of type <E>.
+     * Run the logic within the lambda method across the provided collection/s that contain objects of type &lt;E&gt;.
      * Then place each processed element into the provided return collection of type <RC>.
      *
      * @param returnCollection - the collection that will have the processed elements added to it.
@@ -124,7 +124,7 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the provided collection/s that contain objects of type <E>.
+     * Run the logic within the lambda method across the provided collection/s that contain objects of type &lt;E&gt;.
      * <p/>
      * The return type for the Lambda class is set strictly to Object. This is because the return type in this method
      * is irrelevant.
@@ -145,7 +145,7 @@ public class LambdaCollections {
 
     /**
      * Run the logic within the lambda method across the provided collection/s that contain collections with objects of
-     * type <E>. Then return a collapsed single dimension collection of all the processed elements.
+     * type &lt;E&gt;. Then return a collapsed single dimension collection of all the processed elements.
      *
      * @param returnType  - the Class of the type of collection that should be returned e.g. List.class, Set.class,
      *                    Map.class...
@@ -183,7 +183,7 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the provided list/s that contain objects of type <E>.
+     * Run the logic within the lambda method across the provided list/s that contain objects of type &lt;E&gt;.
      * The argument for the Lambda.lambda method when used with this method is a list containing the rest of the
      * elements that are yet to be processed e,g. the current element/s that are yet to be process along with the
      * remaining tail of the list/s. Then return a new list contain the result of the processed sub lists.
@@ -401,7 +401,7 @@ public class LambdaCollections {
 
     /**
      * Run the logic within the lambda method across the provided collection/s that contain collections with objects of
-     * type <E> and collapse the processed elements into a single dimension collection.
+     * type &lt;E&gt; and collapse the processed elements into a single dimension collection.
      *
      * @param mappedCollection - the single dimension collection that will have the lambda results added to it.
      * @param lambda           - the Lambda object that contains the logic that will be run.
@@ -423,7 +423,7 @@ public class LambdaCollections {
     }
 
     /**
-     * Run the logic within the lambda method across the provided list/s that contain objects of type <E>.
+     * Run the logic within the lambda method across the provided list/s that contain objects of type &lt;E&gt;.
      * The argument for the Lambda.lambda method when used with this method is a list/s containing the rest of the
      * elements that are yet to be processed e,g. the current element that is to be process along with the remaining
      * tail of the list/s. The results of the lambda method will be added to the provided mapped list.
